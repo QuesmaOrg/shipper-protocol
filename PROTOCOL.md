@@ -193,9 +193,10 @@ one claim: `invite` (server-minted, single-use, bounded expiry) or `grant` (serv
 multi-use, revocable, distributed by fleet management in the enroll command). New credentials use
 the form `fmi2.<organization>.<uuid>.<secret>`, so a deployment-level endpoint can locate the
 organization without a change to this request body. The request also carries the client-generated
-`install_id` (UUID), the `device_public_key` that every later request is verified against, the
-install's public `age_recipient`, and the cosmetic `hostname` and `platform`. This is the only
-moment the service learns anything about an install.
+`install_id` (a lowercase UUID: the v2 object-key grammar requires the lowercase spelling, and the
+id cannot be renamed after enrollment), the `device_public_key` that every later request is
+verified against, the install's public `age_recipient`, and the cosmetic `hostname` and
+`platform`. This is the only moment the service learns anything about an install.
 
 **enroll response**: the server-assigned `organization` slug, and nothing else. The server assigns
 it so an install cannot place itself in another organization's subtree. It becomes the

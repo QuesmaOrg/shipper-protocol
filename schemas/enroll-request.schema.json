@@ -22,7 +22,7 @@
       "minLength": 1
     },
     "install_id": {
-      "description": "Client-generated UUID. This is the install's identity from here on. It cannot be renamed, because it is part of every object key.",
+      "description": "Client-generated lowercase UUID. This is the install's identity from here on. It cannot be renamed, because it is part of every object key, and the object-key grammar requires the lowercase spelling.",
       "$ref": "#/$defs/uuid"
     },
     "device_public_key": {
@@ -46,7 +46,7 @@
   "$defs": {
     "uuid": {
       "type": "string",
-      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
     },
     "ed25519_public_key": {
       "type": "string",
