@@ -4,8 +4,7 @@ This document is the authoritative contract for the machine protocol between the
 shipper and the control plane. The JSON Schemas in
 [`schemas/`](schemas/) pin every message shape, the fixtures in [`fixtures/v1/`](fixtures/v1/)
 and [`fixtures/v2/`](fixtures/v2/) are golden payloads. Both peers import this module and run contract
-tests against those exact assets: [Shipper's contract test](https://github.com/QuesmaOrg/quesma-shipper/blob/main/src/internal/controlplane/wire_contract_test.go)
-and the [control-plane contract test](https://github.com/QuesmaOrg/trajectories-research/blob/main/control-plane/wire_contract_test.go).
+tests against those exact assets in their respective implementation repositories.
 The schemas, fixtures, and tests are executable expressions of this authority; change them together
 when the protocol changes.
 
@@ -13,9 +12,7 @@ This repository is the independently released Go module `github.com/QuesmaOrg/sh
 Its `protocol.FS` embeds this document, all schemas, and all fixtures so consumers never depend on
 repository-relative paths. Releases are tagged as `vX.Y.Z`.
 
-The wire structs are deliberately defined twice — in
-[Shipper](https://github.com/QuesmaOrg/quesma-shipper/blob/main/src/internal/controlplane/backend.go)
-and the [control plane](https://github.com/QuesmaOrg/trajectories-research/blob/main/control-plane/protocol.go) —
+The wire structs are deliberately defined twice—in the Shipper and control-plane implementations—
 because importing shared implementations would couple what the protocol keeps separate. The contract tests run both modules against
 the same schemas and fixtures, which is what keeps the two copies equal without coupling
 them.
@@ -33,14 +30,12 @@ version bump.
 ## Changing and releasing the contract
 
 Change this document, its schemas, and its golden fixtures together in one pull request. The module
-test suite validates every schema and fixture and checks the generated rulebook. Run the Shipper and
-control-plane contract suites against the candidate checkout with temporary local `replace`
-directives before merging. After merge, tag the authoritative commit as `vX.Y.Z`; consumers pin that
-version normally and dependency automation proposes compatible upgrades. Never commit a filesystem
-`replace` in a consumer.
-
-The companion repository's [`PROTOCOL.html`](https://github.com/QuesmaOrg/trajectories-research/blob/main/PROTOCOL.html)
-is a non-normative interactive preview of these flows.
+test suite validates every schema and fixture and checks the generated rulebook. Before merging,
+maintainers run the separate Shipper and control-plane contract suites against the candidate checkout
+with temporary local `replace` directives; contributors do not need access to those repositories.
+After merge, tag the authoritative commit as `vX.Y.Z`; consumers pin that version normally and
+dependency automation proposes compatible upgrades. Never commit a filesystem `replace` in a
+consumer.
 
 ## The endpoints
 
@@ -347,8 +342,7 @@ default.
 
 ## What the served config may touch
 
-Per-field authority is decided at resolve time on the client
-([`src/internal/config/resolve.go`](https://github.com/QuesmaOrg/quesma-shipper/blob/main/src/internal/config/resolve.go)). The rulebook, which fields a served document
+Per-field authority is decided at resolve time in the client. The rulebook, which fields a served document
 may set, only add to, only disable, or may not touch at all, lives in
 [`authority.json`](authority.json) and is rendered below. `refused` rows are machine-owner-only.
 
