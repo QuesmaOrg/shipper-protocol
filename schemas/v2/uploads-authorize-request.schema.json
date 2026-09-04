@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/QuesmaOrg/trajectories-research/protocol/schemas/v2/uploads-authorize-request.schema.json",
+  "$id": "https://github.com/QuesmaOrg/shipper-protocol/schemas/v2/uploads-authorize-request.schema.json",
   "title": "POST /v2/uploads/authorize request",
   "description": "A device-signed, bounded batch of exact object keys for which the shipper requests short-lived PUT tickets. The server authenticates the install before interpreting object fields, derives its permitted install root from the enrollment record, and rejects the whole batch when any member is invalid.",
   "type": "object",

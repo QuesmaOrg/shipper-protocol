@@ -17,9 +17,10 @@ because importing shared implementations would couple what the protocol keeps se
 the same schemas and fixtures, which is what keeps the two copies equal without coupling
 them.
 
-Existing schema `$id` values under the historical `trajectories-research` URL are stable identifiers,
-not download locations. Preserve them until a separately reviewed migration has checked every schema
-registry and tool that may key documents by `$id`.
+Schema `$id` values use the canonical `https://github.com/QuesmaOrg/shipper-protocol/schemas/...`
+namespace. They are stable identifiers, not download locations. Once published in a tagged release,
+an identifier must not be changed in place; incompatible schema changes require a new protocol
+version and identifier.
 
 Wire versions are immutable once released. A breaking wire change adds a new endpoint and schema
 version (for example `v3`) instead of changing the meaning or accepted shape of an existing v1 or v2

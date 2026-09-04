@@ -10,8 +10,8 @@ or security consequences. Participation is governed by our [Code of Conduct](COD
   case and the compatibility impact rather than only the proposed wire shape.
 - Never change the meaning or accepted shape of a released wire version. Add a new endpoint and
   schema version for a breaking change.
-- Treat schema `$id` values as stable identifiers. Their historical repository paths are intentional
-  and are not expected to resolve as URLs.
+- Treat schema `$id` values as stable identifiers. Do not change identifiers published in a release;
+  introduce a new protocol version and identifier when a breaking change is required.
 - Do not include production payloads, credentials, hostnames, customer data, or presigned URLs in
   issues, pull requests, or fixtures. All fixtures must be minimal synthetic examples.
 

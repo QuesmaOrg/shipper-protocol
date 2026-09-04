@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/QuesmaOrg/trajectories-research/protocol/schemas/enroll-request.schema.json",
+  "$id": "https://github.com/QuesmaOrg/shipper-protocol/schemas/enroll-request.schema.json",
   "title": "POST /v1/enroll request",
   "description": "The one-time registration, and the one unsigned protocol request. Gated by exactly one claim: a single-use server-minted invite (the interactive path) or a multi-use server-minted grant (the managed path, carried in the enroll command fleet management distributes). It is the only moment the service learns anything about an install: id, device key, public age recipient, and cosmetics. The server decodes this request strictly -- an unknown field is a 400, unlike /v1/config.",
   "type": "object",
