@@ -1,5 +1,5 @@
 {
-  "comment": "The rulebook: what a served config document may touch, field by field. There is one served tier, so every row below describes the one remote layer. This data bounds its authority, enforced at resolve time by Quesma Shipper (src/internal/config/resolve.go). Executable twice over: Shipper's authority_rulebook_test.go asserts every row against the resolver, and cmd/protocolgen renders the table in PROTOCOL.md (-check fails on drift).",
+  "comment": "The rulebook: what a served config document may touch, field by field. There is one served tier, so every row below describes the one remote layer. This data bounds its authority and is enforced at resolve time by Quesma Shipper. It is executable twice over: the Shipper contract tests assert every row against the resolver, and cmd/protocolgen renders the table in PROTOCOL.md (-check fails on drift).",
   "classes": {
     "set": "the served document may set the field, within compiled validation",
     "union": "add only — union with the compiled/local set, can never remove",

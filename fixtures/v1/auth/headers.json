@@ -1,5 +1,5 @@
 {
-  "comment": "Golden material for the Shipper-Device authorization scheme. The organization locates the install record but is not signed. The device key is ed25519.NewKeyFromSeed(device_key_seed_hex); each authorization is a detached signature over the EXACT body bytes. Both modules' wire contract tests consume this file: the client proves it reproduces the golden headers, the server proves it accepts them and rejects every entry in `rejected`.",
+  "comment": "Synthetic golden material for the Shipper-Device authorization scheme; every value is public test data and must not be used as a real credential. The organization locates the install record but is not signed. The device key is ed25519.NewKeyFromSeed(device_key_seed_hex); each authorization is a detached signature over the EXACT body bytes. Both modules' wire contract tests consume this file: the client proves it reproduces the golden headers, the server proves it accepts them and rejects every entry in `rejected`.",
   "install_id": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
   "device_key_seed_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
   "device_public_key": "A6EHv/POEL4dcN0Y50vAmWfk1jCbpQ1fHdyGZBJVMbg=",
