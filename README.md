@@ -42,3 +42,7 @@ public namespace. They are stable identifiers, not download locations. An identi
 a release does not change in place.
 
 Licensed under the [Apache License 2.0](LICENSE). See [`NOTICE`](NOTICE).
+
+Quesma, Quesma Shipper, and the Quesma logo are trademarks of Quesma Inc. The license does not
+grant trademark rights. If you distribute a modified version, read [`TRADEMARKS.md`](TRADEMARKS.md)
+before you name it.
