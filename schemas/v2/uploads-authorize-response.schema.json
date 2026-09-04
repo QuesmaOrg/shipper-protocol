@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/QuesmaOrg/trajectories-research/protocol/schemas/v2/uploads-authorize-response.schema.json",
+  "$id": "https://github.com/QuesmaOrg/shipper-protocol/schemas/v2/uploads-authorize-response.schema.json",
   "title": "POST /v2/uploads/authorize response",
   "description": "One entry for every request object: a short-lived PUT ticket, or the already-present answer that carries no capability. URLs and query strings are bearer credentials and must never be logged. The shipper strictly decodes each answer and validates every PUT ticket against the original object and its machine-owner upload target before sending bytes.",
   "type": "object",

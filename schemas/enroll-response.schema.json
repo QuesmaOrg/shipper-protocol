@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/QuesmaOrg/trajectories-research/protocol/schemas/enroll-response.schema.json",
+  "$id": "https://github.com/QuesmaOrg/shipper-protocol/schemas/enroll-response.schema.json",
   "title": "POST /v1/enroll response",
   "description": "What the server returns once. Nothing sink-shaped travels here: the destination arrives later in the served config, and the write scope is enforced per authorization. The client decodes this strictly -- an unknown field fails the enrollment.",
   "type": "object",

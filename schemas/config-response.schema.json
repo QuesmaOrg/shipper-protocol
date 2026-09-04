@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/QuesmaOrg/trajectories-research/protocol/schemas/config-response.schema.json",
+  "$id": "https://github.com/QuesmaOrg/shipper-protocol/schemas/config-response.schema.json",
   "title": "POST /v1/config response",
   "description": "Carries ONE document: the org's served config. A response the client cannot parse or execute is refused whole and the cached config keeps collecting.",
   "type": "object",

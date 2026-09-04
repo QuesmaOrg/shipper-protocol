@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/QuesmaOrg/trajectories-research/protocol/schemas/config-request.schema.json",
+  "$id": "https://github.com/QuesmaOrg/shipper-protocol/schemas/config-request.schema.json",
   "title": "POST /v1/config request",
   "description": "Deliberately minimal: which build is asking, and which config schema versions it can execute. The capability inventory it replaced (adapters, steps, rule packs) negotiated against requirements the server never varied. The version list is not a min-version pin: a version floor can brick a fleet that cannot move, while an explicit 409 on an unsupported config_version refuses cleanly instead of partially applying. The server decodes this request tolerantly -- growing it is a client-first ship.",
   "type": "object",

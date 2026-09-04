@@ -35,7 +35,8 @@ should follow [`SECURITY.md`](SECURITY.md).
 ## Versioning and license
 
 Release tags use ordinary Go module versions such as `v0.1.0`. Wire versions are immutable after
-release; breaking changes get a new endpoint and schema version. Existing historical schema `$id`
-values are deliberately preserved as stable identifiers and are not download locations.
+release; breaking changes get a new endpoint and schema version. Schema `$id` values use this
+repository's public namespace. Treat them as stable identifiers rather than download locations;
+published identifiers must not be changed in place.
 
 Licensed under the [Apache License 2.0](LICENSE).
