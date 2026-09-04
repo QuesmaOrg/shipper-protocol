@@ -1,21 +1,24 @@
 # Security policy
 
-## Reporting a vulnerability
+## Report a vulnerability
 
-Do not open a public issue for a suspected vulnerability or include real credentials, customer data,
-presigned URLs, or production payloads in a report. Email `contact@quesma.com` with the subject
-`Security: shipper-protocol` and include:
+Do not open a public issue for a suspected vulnerability. Do not include real credentials, customer
+data, presigned URLs, or production payloads in a report.
+
+Use GitHub's private vulnerability reporting at
+<https://github.com/QuesmaOrg/shipper-protocol/security/advisories/new>, or email
+`contact@quesma.com` with the subject `Security: shipper-protocol`. Include:
 
 - the affected protocol or module version;
-- the impact and conditions required to reproduce it;
-- minimal reproduction steps using synthetic data; and
-- any suggested mitigation, if known.
+- the impact and the conditions needed to reproduce it;
+- minimal reproduction steps that use synthetic data;
+- a suggested mitigation, if you have one.
 
-We will acknowledge the report and coordinate disclosure after assessing it. Please allow time for
-both protocol peers to be patched before publishing details.
+We acknowledge each report, assess it, and coordinate disclosure with you. Allow time for both
+protocol peers to be patched before you publish details.
 
 ## Supported versions
 
 Security fixes are made on the latest released module version. The default branch is development
-code and is not a supported release. Because wire versions are immutable after release, a fix that
-cannot be made compatibly will use a new endpoint and schema version.
+code and is not a supported release. Wire versions are immutable after release. A fix that cannot
+be made compatibly uses a new endpoint and schema version.

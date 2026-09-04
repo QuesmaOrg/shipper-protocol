@@ -2,17 +2,17 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/QuesmaOrg/shipper-protocol/schemas/config-response.schema.json",
   "title": "POST /v1/config response",
-  "description": "Carries ONE document: the org's served config. A response the client cannot parse or execute is refused whole and the cached config keeps collecting.",
+  "description": "Carries one document: the organization's served config. A response the client cannot parse or execute is refused whole, and the cached config keeps collecting.",
   "type": "object",
   "required": ["config", "expires_at"],
   "additionalProperties": false,
   "properties": {
     "config": {
-      "description": "The served YAML document, standard base64 (a Go []byte). The stored bytes are served verbatim and cached verbatim.",
+      "description": "The served YAML document, standard base64. The stored bytes are served verbatim and cached verbatim.",
       "$ref": "#/$defs/base64"
     },
     "expires_at": {
-      "description": "When this document goes stale (server clock + CP_CONFIG_TTL). Expiry fails toward collecting: the client keeps running on the cached config and stamps config_expired rather than halting, because source stores are reaped on their own schedules and a halted client loses data permanently.",
+      "description": "When this document goes stale: server clock plus the control-plane config TTL. Expiry does not stop collection: the client keeps running on the cached config and stamps config_expired, because source stores are reaped on their own schedules and a halted client loses data permanently.",
       "$ref": "#/$defs/timestamp"
     }
   },

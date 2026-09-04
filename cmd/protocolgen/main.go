@@ -107,7 +107,7 @@ func main() {
 	want := "\n" + table
 	if *check {
 		if current != want {
-			fail("the rulebook table in %s is stale: run `go run ./cmd/protocolgen` in protocol after editing authority.json", *docPath)
+			fail("the rulebook table in %s is stale: run `go run ./cmd/protocolgen` from the module root after editing authority.json", *docPath)
 		}
 		return
 	}
