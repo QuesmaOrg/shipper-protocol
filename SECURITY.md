@@ -5,7 +5,9 @@
 Do not open a public issue for a suspected vulnerability. Do not include real credentials, customer
 data, presigned URLs, or production payloads in a report.
 
-Email `contact@quesma.com` with the subject `Security: shipper-protocol`. Include:
+Use GitHub's private vulnerability reporting at
+<https://github.com/QuesmaOrg/shipper-protocol/security/advisories/new>, or email
+`contact@quesma.com` with the subject `Security: shipper-protocol`. Include:
 
 - the affected protocol or module version;
 - the impact and the conditions needed to reproduce it;
