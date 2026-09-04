@@ -64,7 +64,7 @@
       }
     },
     "mirror_metadata": {
-      "description": "Allowlisted plaintext metadata. source_hash is deliberately absent because the server derives the provider-specific source-hash metadata header from the dedicated validated field.",
+      "description": "Allowlisted plaintext metadata. source_hash is absent because the server derives the provider-specific source-hash metadata header from the dedicated validated field.",
       "type": "object",
       "required": ["manifest-version", "source-id", "shipped-hash", "artifact-class"],
       "additionalProperties": false,
