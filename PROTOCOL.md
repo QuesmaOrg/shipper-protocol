@@ -218,8 +218,9 @@ bytes. It has the same meaning as in the sealed manifest. It is future deduplica
 a checksum of the encrypted PUT body. The request does not carry native paths, bucket, region,
 provider endpoint, HTTP method, expiration, or arbitrary headers.
 
-**upload authorization response**: a strict, closed object with one answer per request object. An
-answer is either a PUT ticket or an `already_present: true` result. `already_present` means the
+**upload authorization response**: an object with one answer per request object. The client
+ignores response fields it does not know and validates every field it acts on. An answer is
+either a PUT ticket or an `already_present: true` result. `already_present` means the
 archive already holds the exact key under the requested `source_hash`. It carries only `ticket_id`
 and `object_id`, grants no capability, requires no PUT, and counts as success, so the local
 fingerprint can commit.
@@ -236,8 +237,9 @@ tickets also require `x-ms-blob-type: BlockBlob`. Successful responses carry
 
 ## V2 upload authorization rules
 
-The JSON Schemas close every object with `additionalProperties: false`. Both peers also decode
-strictly. If any batch member is invalid, the server refuses the whole authorization request and
+The JSON Schemas close every object with `additionalProperties: false`. The server decodes the
+request strictly; the client ignores response fields it does not know and validates every field
+it acts on. If any batch member is invalid, the server refuses the whole authorization request and
 issues no tickets. This does not couple the later PUT results: successful siblings commit to the
 local fingerprint independently.
 
@@ -299,8 +301,10 @@ timeout policy as mirror objects.
 
 These rules are normative.
 
-1. **The client ships first.** The client decodes every response with unknown fields disallowed.
-   The server therefore never adds a response field before the fleet can decode it.
+1. **Responses grow server-first, requests client-first.** The client ignores response fields
+   it does not know, so the server may add one before the fleet moves. A new required header
+   name or provider dialect is not a new field: the client refuses names outside its closed set,
+   so those still ship client-first.
 2. **`/v1/config` requests also grow client-first.** The server decodes the config request
    tolerantly and ignores fields it does not know. A newer client can talk to an older server.
 3. **`/v1/enroll` is strict both ways.** The server rejects unknown request fields with a 400.
@@ -310,9 +314,10 @@ These rules are normative.
    reason, never a partially applied document.
 5. **`/v1/` is the protocol version.** A breaking change is a new URL prefix with its own schemas
    and fixtures (`fixtures/v2/`). The old ones freeze in place.
-6. **V2 upload messages are strict both ways.** The server rejects unknown request fields. The
-   shipper rejects unknown response fields. Growth that needs a new field is a new endpoint
-   version or an explicitly optional field shipped client-first.
+6. **V2 upload requests are strict, responses are tolerant.** The server rejects unknown
+   request fields. The shipper ignores unknown response fields and validates every field it acts
+   on against the object it prepared, so an unread field can never widen what is sent. A new
+   request field is a new endpoint version or an explicitly optional field shipped client-first.
 7. **The served config document grows server-first.** The client parses the served YAML
    tolerantly and ignores keys it does not know, so an organization can serve a field before the
    slowest install understands it. An unknown key attaches no client behavior, so ignoring one can
@@ -384,4 +389,5 @@ Not settable from any config layer:
   can be up to a process lifetime away.
 - **No upload status.** V2 records authorization intent and may later correlate object-store
   receipts. Neither is a shipper progress API. The local fingerprint document is authoritative for
-  upload progress.
+  upload progress. The single exception is `already_present`: answered per object from the
+  archive's own metadata, and only when the shipper asked.
