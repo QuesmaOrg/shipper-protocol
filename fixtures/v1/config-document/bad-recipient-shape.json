@@ -1,7 +1,0 @@
-{
-  "encryption": {
-    "additional_recipients": [
-      "not-an-age-key"
-    ]
-  }
-}

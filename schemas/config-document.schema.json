@@ -1,183 +1,79 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/QuesmaOrg/shipper-protocol/schemas/config-document.schema.json",
-  "title": "Served configuration document authoring schema",
-  "description": "Canonical authoring constraints for the decoded YAML object, before base64 transport. This is not a replacement for client resolution against its local configuration and compiled catalogs. Unknown fields are rejected when authoring; clients still ignore unknown served fields within a supported config_version.",
+  "title": "Served configuration document",
+  "description": "Validates new control-plane writes, not legacy reads or build-specific client capabilities.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "issued_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "org": {
-      "type": "string",
-      "minLength": 1
-    },
-    "config_version": {
-      "const": 1
-    },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "org": { "type": "string", "minLength": 1 },
+    "config_version": { "const": 1 },
     "mode": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "schedule": {
-          "type": "string",
-          "pattern": "^\\+?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:ns|us|µs|μs|ms|s|m|h)(?:(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:ns|us|µs|μs|ms|s|m|h))*$",
-          "format": "go-schedule-duration",
-          "description": "Go time.ParseDuration value of at least one minute; int64 nanosecond overflow is invalid."
-        }
+        "schedule": { "type": "string", "format": "go-schedule-duration" }
       }
     },
-    "max_files_per_run": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 9223372036854775807
-    },
-    "drain_deadline": {
-      "type": "string",
-      "pattern": "^\\+?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:ns|us|µs|μs|ms|s|m|h)(?:(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:ns|us|µs|μs|ms|s|m|h))*$",
-      "format": "go-positive-duration",
-      "description": "Go time.ParseDuration value greater than zero; int64 nanosecond overflow is invalid."
-    },
+    "max_files_per_run": { "$ref": "#/$defs/count" },
+    "drain_deadline": { "type": "string", "format": "go-positive-duration" },
     "sources": {
       "type": "array",
       "items": {
         "type": "object",
+        "required": ["id"],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "roots": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "include": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "exclude": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "max_file_bytes": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9223372036854775807
-          },
-          "enrichers": {
-            "type": "object",
-            "additionalProperties": {
-              "const": false
-            }
-          }
-        },
-        "required": [
-          "id"
-        ],
-        "description": "An override of a compiled source. The client checks source/enricher IDs, root scope and local disables."
+          "id": { "type": "string", "minLength": 1 },
+          "enabled": { "type": "boolean" },
+          "roots": { "$ref": "#/$defs/strings" },
+          "include": { "$ref": "#/$defs/strings" },
+          "exclude": { "$ref": "#/$defs/strings" },
+          "max_file_bytes": { "$ref": "#/$defs/count" },
+          "enrichers": { "type": "object", "additionalProperties": { "const": false } }
+        }
       }
     },
     "scrub": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "rule_packs": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "secret_key_names": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
+        "rule_packs": { "$ref": "#/$defs/strings" },
+        "secret_key_names": { "$ref": "#/$defs/strings" }
       }
     },
-    "structural_exempt": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      }
-    },
+    "structural_exempt": { "type": "object", "additionalProperties": { "$ref": "#/$defs/strings" } },
     "encryption": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "additional_recipients": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "pattern": "^age1[023456789acdefghjklmnpqrstuvwxyz]{58}$",
-            "description": "Age X25519 public recipient; checksum and decoded key validation remain client responsibilities."
-          }
+          "items": { "type": "string", "pattern": "^age1[023456789acdefghjklmnpqrstuvwxyz]{58}$" }
         },
-        "include_install_recipient": {
-          "type": "boolean"
-        }
+        "include_install_recipient": { "type": "boolean" }
       },
-      "allOf": [
-        {
-          "if": {
-            "required": [
-              "include_install_recipient"
-            ],
-            "properties": {
-              "include_install_recipient": {
-                "const": false
-              }
-            }
-          },
-          "then": {
-            "required": [
-              "additional_recipients"
-            ],
-            "properties": {
-              "additional_recipients": {
-                "minItems": 1
-              }
-            }
-          }
-        }
-      ]
+      "if": {
+        "required": ["include_install_recipient"],
+        "properties": { "include_install_recipient": { "const": false } }
+      },
+      "then": {
+        "required": ["additional_recipients"],
+        "properties": { "additional_recipients": { "minItems": 1 } }
+      }
     },
     "autoupdate": {
       "type": "object",
       "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "const": false
-        }
-      }
+      "properties": { "enabled": { "const": false } }
     },
-    "telemetry_endpoint": {
-      "type": "string",
-      "pattern": "^(?:|/(?:[^/].*)?)$",
-      "description": "Empty disables telemetry; otherwise a path on the enrolled control-plane origin, never a URL or network-path reference."
-    },
-    "send": {
-      "type": "object",
-      "description": "Legacy ignored map; no sink is selected."
-    },
-    "crash_report": {
-      "type": "object",
-      "description": "Legacy ignored map; crash reporting is removed."
-    }
+    "telemetry_endpoint": { "type": "string", "pattern": "^(?:|/(?:[^/].*)?)$" },
+    "send": { "type": "object", "description": "Legacy ignored map." },
+    "crash_report": { "type": "object", "description": "Legacy ignored map." }
+  },
+  "$defs": {
+    "strings": { "type": "array", "items": { "type": "string" } },
+    "count": { "type": "integer", "minimum": 0, "maximum": 9223372036854775807 }
   }
 }

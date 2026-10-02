@@ -9,15 +9,9 @@ import (
 	"github.com/santhosh-tekuri/jsonschema/v6"
 )
 
-// ValidateConfigDocument validates a JSON representation of a served YAML document
-// against the canonical authoring schema. Pass the decoded object, not the base64
-// /v1/config response envelope. The empty object is a valid layer of defaults.
-//
-// This enforces the schema's custom Go duration formats as well as its shape.
-// It does not replace client resolution: source IDs, rule packs, root ceilings,
-// recipient checksums, and interactions with machine-local layers remain client
-// responsibilities. Clients may accept older documents outside this authoring
-// profile; this function is intended for control-plane writes, not client reads.
+// ValidateConfigDocument checks a decoded served document represented as JSON.
+// It validates new control-plane writes, including Go duration bounds; client
+// resolution against compiled capabilities and local settings is still required.
 func ValidateConfigDocument(rawJSON []byte) error {
 	schema, err := configDocumentSchema()
 	if err != nil {

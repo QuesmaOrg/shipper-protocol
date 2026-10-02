@@ -126,12 +126,6 @@
       "default": "true",
       "server_may": "off-only",
       "note": "Self-update at daemon startup, release builds only. Re-enabling over a local refusal would push new code onto a machine its owner froze."
-    },
-    {
-      "field": "telemetry_endpoint",
-      "default": "empty (disabled)",
-      "server_may": "envelope",
-      "note": "A path on the enrolled control-plane origin, never a URL. Absent or empty disables telemetry. A local file must not carry this field."
     }
   ],
   "not_settable": [

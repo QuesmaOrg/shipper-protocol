@@ -15,13 +15,6 @@ versioning. Wire versions (`/v1/`, `/v2/`) are immutable and are not tracked by 
 
 ### Added
 
-- A canonical authoring schema and valid/invalid fixtures for decoded served configuration
-  documents, plus `ValidateConfigDocument` for Go consumers with checked Go duration formats.
-  This does not change `/v1/config` transport or require stricter reads of legacy documents.
-- The telemetry endpoint's served-only authority rule. Clarified that clients replace the
-  last working cache only after successful resolution and report rejection through enabled
-  telemetry without configuration contents.
-
 - Initial public release of the protocol module: PROTOCOL.md, JSON Schemas for `/v1/enroll`,
   `/v1/config`, and `/v2/uploads/authorize`, the configuration authority rulebook, and golden
   fixtures. All assets are embedded in `protocol.FS`.

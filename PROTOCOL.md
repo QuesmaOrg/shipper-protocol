@@ -210,13 +210,6 @@ response the client cannot parse or execute is refused whole, and the cached con
 collecting. Expiry does not stop collection: a client that halts loses data permanently, and one
 that keeps going loses nothing.
 
-The cache is a **last successfully resolved document**, not the last response received. A
-client must parse and resolve a candidate with its local layers and compiled capabilities
-before replacing that cache. Rejection preserves both the prior bytes and their expiry. The
-client reports a configuration rejection through its diagnostics and, when enabled by the
-working configuration, telemetry; the rejected document cannot enable telemetry or change its
-destination. The alert must not contain raw configuration, recipients, or machine paths.
-
 **upload authorization request**: a strict, closed object with `writer_id`, `issued_at`, and 1 to
 32 prepared object descriptors. Every descriptor carries a batch-local `object_id`, the complete
 blinded key, the exact ciphertext `size`, the required `source_hash`, and closed allowlisted
@@ -242,36 +235,18 @@ are bearer credentials. Neither peer logs them. When present, S3's `x-amz-taggin
 tickets also require `x-ms-blob-type: BlockBlob`. Successful responses carry
 `Cache-Control: no-store`.
 
-## Served configuration authoring
+## Served configuration validation
 
 [`config-document.schema.json`](schemas/config-document.schema.json) describes the decoded
-served YAML object, independently of the base64 response envelope. Control planes validate new
-writes against this schema before rendering YAML. An empty object is a valid layer of defaults;
-`issued_at`, `org`, and `telemetry_endpoint` are optional because the control plane may add them
-after validating the authored collection settings. Validate the composed document too.
+served YAML object. Control planes use `protocol.ValidateConfigDocument(rawJSON)` on new
+writes before rendering YAML. It checks types, allowed fields, and Go durations: a positive
+`drain_deadline` and `mode.schedule` of at least one minute. The helper asserts the schema's
+custom duration formats; generic validators must register those formats too.
 
-This is a **canonical authoring profile**, not a change to the `/v1/config` wire format or a
-requirement to reject existing stored documents on reads. It rejects unknown properties,
-nulls, machine-owner fields, remote enables of off-only settings, and malformed scalar values.
-New documents use config version 1, nonnegative integer counts, a schedule of at least one
-minute, and a positive drain deadline. A document withholding the install reader must itself
-supply another reader. Older clients can be more permissive: for example, they ignore unknown
-served fields, default version 0, clamp a short schedule, or obtain a reader from a local layer.
-
-The custom formats `go-positive-duration` and `go-schedule-duration` mean Go `time.ParseDuration`
-with a minimum of one nanosecond and one minute, respectively, including its signed int64
-nanosecond overflow check. Schema consumers must assert these formats; a generic validator that
-ignores unknown formats cannot enforce duration bounds. The Go function
-`protocol.ValidateConfigDocument(rawJSON)` registers and asserts them and the standard
-`date-time` format. JSON must represent the decoded YAML object, not its base64 encoding.
-
-Validation at authoring time cannot guarantee acceptance by every shipper build. Clients still
-resolve against the source/enricher catalog, available rule packs, root scope ceilings, and
-machine-local restrictions, and validate the age recipient checksum and key. The schema checks
-only the recipient's canonical lowercase X25519 string shape. These client checks and last-good
-fallback remain necessary even when authoring validation succeeds. Golden examples in
-[`fixtures/v1/config-document`](fixtures/v1/config-document/) exercise this authoring profile;
-`bad-*` examples are authoring failures, not universal client-rejection claims.
+This does not change the wire format or tighten legacy reads. Source catalogs, rule packs,
+recipient keys, and local-layer restrictions still require client resolution. A client must
+resolve successfully before replacing its last working cache, and report rejection through
+telemetry when enabled by the working configuration, without including configuration contents.
 
 ## V2 upload authorization rules
 
@@ -409,7 +384,6 @@ document may set, only add to, only disable, or not touch at all. It lives in
 | `a source id not in the compiled catalog` | — | **refused** | A config layer cannot create a source. It can only adjust one. |
 | `crash_report.enabled / dsn` | no crash reporting | **read and ignored** | Vestigial. Crash reporting is removed. The key still parses from any layer and is discarded, so older configs and served documents keep working. Clients from before the removal still enforce the old rules: enabled is off-only, and a served dsn is refused. |
 | `autoupdate.enabled` | true | **turn off only** | Self-update at daemon startup, release builds only. Re-enabling over a local refusal would push new code onto a machine its owner froze. |
-| `telemetry_endpoint` | empty (disabled) | **served document only** | A path on the enrolled control-plane origin, never a URL. Absent or empty disables telemetry. A local file must not carry this field. |
 
 Not settable from any config layer:
 

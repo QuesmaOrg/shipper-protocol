@@ -18,19 +18,6 @@ import protocol "github.com/QuesmaOrg/shipper-protocol"
 raw, err := protocol.FS.ReadFile("schemas/enroll-request.schema.json")
 ```
 
-Control planes can validate a JSON representation of newly authored served configuration before
-rendering it to YAML:
-
-```go
-err := protocol.ValidateConfigDocument([]byte(`{"mode":{"schedule":"15m"},"drain_deadline":"1h"}`))
-```
-
-The [authoring schema](schemas/config-document.schema.json) includes custom Go duration formats;
-the helper enforces them. Clients still validate build-specific capabilities and local-layer
-interactions before replacing their last working configuration. See
-[served configuration authoring](PROTOCOL.md#served-configuration-authoring) for the compatibility
-boundary.
-
 The fixtures are synthetic test vectors. The token-shaped values, signatures, URLs, and the
 documented Ed25519 seed are public. Do not use them as production credentials.
 
