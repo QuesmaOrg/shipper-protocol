@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "id": "claude-code-transcripts",
+      "enable": false
+    }
+  ]
+}

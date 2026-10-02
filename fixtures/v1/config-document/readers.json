@@ -1,0 +1,8 @@
+{
+  "encryption": {
+    "additional_recipients": [
+      "age1cpx4grz9j4fkn36cfurggwcg4l0da5fyqadl8fwagtcwy55gt44qlclfa5"
+    ],
+    "include_install_recipient": false
+  }
+}

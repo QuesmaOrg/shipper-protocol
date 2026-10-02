@@ -1,0 +1,5 @@
+{
+  "encryption": {
+    "include_install_recipient": false
+  }
+}

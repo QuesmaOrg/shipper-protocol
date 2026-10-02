@@ -1,0 +1,6 @@
+{
+  "mode": {
+    "schedule": "1m0.5s"
+  },
+  "drain_deadline": "+1.5ms"
+}

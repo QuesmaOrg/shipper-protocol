@@ -1,0 +1,15 @@
+{
+  "issued_at": "2026-10-01T12:00:00Z",
+  "org": "example",
+  "telemetry_endpoint": "/v1/telemetry",
+  "autoupdate": {
+    "enabled": false
+  },
+  "send": {
+    "sink": "s3",
+    "bucket": "ignored"
+  },
+  "crash_report": {
+    "enabled": false
+  }
+}
