@@ -68,9 +68,7 @@
       "additionalProperties": false,
       "properties": { "enabled": { "const": false } }
     },
-    "telemetry_endpoint": { "type": "string", "pattern": "^(?:|/(?:[^/].*)?)$" },
-    "send": { "type": "object", "description": "Legacy ignored map." },
-    "crash_report": { "type": "object", "description": "Legacy ignored map." }
+    "telemetry_endpoint": { "type": "string", "pattern": "^(?:|/(?:[^/].*)?)$" }
   },
   "$defs": {
     "strings": { "type": "array", "items": { "type": "string" } },

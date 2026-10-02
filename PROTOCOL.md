@@ -238,12 +238,13 @@ tickets also require `x-ms-blob-type: BlockBlob`. Successful responses carry
 ## Served configuration validation
 
 [`config-document.schema.json`](schemas/config-document.schema.json) describes the decoded
-served YAML object. Control planes use `protocol.ValidateConfigDocument(rawJSON)` on new
+served YAML object. Control planes should use `protocol.ValidateConfigDocument(rawJSON)` on new
 writes before rendering YAML. It checks types, allowed fields, and Go durations: a positive
 `drain_deadline` and `mode.schedule` of at least one minute. The helper asserts the schema's
 custom duration formats; generic validators must register those formats too.
 
-This does not change the wire format or tighten legacy reads. Source catalogs, rule packs,
+New writes reject the legacy `send` and `crash_report` fields, which clients still read and
+ignore. This does not change the wire format or tighten legacy reads. Source catalogs, rule packs,
 recipient keys, and local-layer restrictions still require client resolution. A client must
 resolve successfully before replacing its last working cache, and report rejection through
 telemetry when enabled by the working configuration, without including configuration contents.

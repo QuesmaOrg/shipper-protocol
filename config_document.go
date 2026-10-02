@@ -26,6 +26,7 @@ func ValidateConfigDocument(rawJSON []byte) error {
 
 var configDocumentSchema = sync.OnceValues(func() (*jsonschema.Schema, error) {
 	const name = "schemas/config-document.schema.json"
+	const schemaID = "https://github.com/QuesmaOrg/shipper-protocol/schemas/config-document.schema.json"
 	raw, err := FS.ReadFile(name)
 	if err != nil {
 		return nil, err
@@ -44,10 +45,10 @@ var configDocumentSchema = sync.OnceValues(func() (*jsonschema.Schema, error) {
 		Name:     "go-schedule-duration",
 		Validate: durationAtLeast(time.Minute),
 	})
-	if err := compiler.AddResource(name, doc); err != nil {
+	if err := compiler.AddResource(schemaID, doc); err != nil {
 		return nil, err
 	}
-	return compiler.Compile(name)
+	return compiler.Compile(schemaID)
 })
 
 func durationAtLeast(minimum time.Duration) func(any) error {
