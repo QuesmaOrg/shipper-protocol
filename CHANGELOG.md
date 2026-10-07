@@ -8,6 +8,7 @@ versioning. Wire versions (`/v1/`, `/v2/`) are immutable and are not tracked by 
 
 ### Changed
 
+- The rulebook's `drain_deadline` default is 5m, the value the shipper uses; it said 1h.
 - PROTOCOL.md compatibility rules 1 and 6 now say what the schema already allows: the shipper
   ignores `/v2/uploads/authorize` response fields it does not know and validates every field it
   acts on; the server still decodes requests strictly. Documentation only, no schema or fixture
@@ -15,6 +16,13 @@ versioning. Wire versions (`/v1/`, `/v2/`) are immutable and are not tracked by 
 
 ### Added
 
+- `/v1/config` requests may carry `catalog`: the build's compiled source catalog (sources, rule
+  packs, served-document features), root templates unexpanded. Optional, so older clients are
+  served as before. PROTOCOL.md gains "Source catalog report": how a control plane validates
+  writes and serves per install with it.
+- Served documents may carry `sources[].exclude_add`, appended to a source's excludes (rulebook
+  class `union`). Served only to builds that report the `sources.exclude_add` feature and folded
+  into `exclude` for the others, because an ignored addition would widen collection.
 - Initial public release of the protocol module: PROTOCOL.md, JSON Schemas for `/v1/enroll`,
   `/v1/config`, and `/v2/uploads/authorize`, the configuration authority rulebook, and golden
   fixtures. All assets are embedded in `protocol.FS`.

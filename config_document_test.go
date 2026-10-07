@@ -35,7 +35,7 @@ func TestConfigDocumentFixtures(t *testing.T) {
 }
 
 func TestConfigDocumentValidation(t *testing.T) {
-	for _, raw := range []string{`{}`, `{"mode":{"schedule":"1m"},"drain_deadline":"1ns"}`} {
+	for _, raw := range []string{`{}`, `{"mode":{"schedule":"1m"},"drain_deadline":"1ns"}`, `{"sources":[{"id":"example","exclude_add":["a/**"]}]}`} {
 		if err := protocol.ValidateConfigDocument([]byte(raw)); err != nil {
 			t.Errorf("rejected %s: %v", raw, err)
 		}
@@ -46,6 +46,7 @@ func TestConfigDocumentValidation(t *testing.T) {
 		`{"drain_deadline":"0s"}`, `{"drain_deadline":"-1s"}`, `{"drain_deadline":"999999999999999999h"}`,
 		`{"mode":{"schedule":"30s"}}`, `{"mode":{"schedule":"forever"}}`,
 		`{"sources":"hello"}`, `{"sources":[{}]}`, `{"sources":[{"id":"example","enabled":"yes"}]}`,
+		`{"sources":[{"id":"example","exclude_add":"a/**"}]}`, `{"sources":[{"id":"example","exclude_add":[1]}]}`,
 		`{"unknown":true}`, `{"mode":{"unknown":true}}`,
 		`{"send":{}}`, `{"send":{"sink":"s3","bucket":"example"}}`,
 		`{"crash_report":{}}`, `{"crash_report":{"enabled":false}}`,
