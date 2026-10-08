@@ -246,8 +246,8 @@ fields the build reads. Only the build knows those, so it says so: the config re
   collected by default, its root templates, its include and exclude globs, its size cap and the
   enrichers a served document may turn off.
 - `rule_packs`: the scrub rule packs the build has.
-- `features`: the served-document features it reads beyond the `config_version` it accepts.
-  Defined today: `sources.exclude_add`.
+- `features`: the served-document features it reads beyond the `config_version` it accepts. None
+  is defined yet; the list lets a later field be served only to builds that read it.
 
 **What it never carries.** Root templates are reported as compiled (`$CLAUDE_CONFIG_DIR`,
 `~/.claude`), never expanded. The catalog is the same on every machine running the build: it
@@ -257,16 +257,19 @@ collected data.
 **How a control plane uses it.** It is optional and advisory; the client still resolves every
 served document against its own catalog and remains the authority.
 
-1. **Validating writes.** A control plane may refuse a document naming a source or rule pack that
-   no reporting install has, and should say which installs lack one it accepts.
-2. **Serving per install.** A control plane that holds the requesting install's catalog may render
-   the document for it: leave out `sources[]` entries the build does not have, so the build does
-   not refuse the whole document for one entry another build needs.
-3. **`sources[].exclude_add`.** Serve it only to a build that lists `sources.exclude_add`. For a
-   build that does not, fold it into `exclude`: that build's reported `exclude` for the source,
-   or the document's own `exclude` when it sets one, followed by the additions. A build that reported
-   no catalog cannot be folded for, so a control plane must not serve an `exclude_add` it cannot
-   fold; refusing the write while such installs are active is the safe answer.
+1. **Discovery, not an allowlist.** The sources a fleet's catalogs report are the sources the
+   control plane has seen, not every source there is. A newer or custom build may carry one no
+   other install reports, and an install without a catalog has unknown support, not none.
+   Reporting is how a control plane learns a new build's sources without being upgraded itself.
+   A control plane uses the reported set to offer sources by name and to catch typos; it should
+   keep a source ID it already stores, and may accept one no install reports when an
+   administrator asks for it explicitly, with a warning that no install has confirmed it.
+2. **Rule packs.** A build refuses a served document naming a rule pack it does not have. A
+   control plane may refuse such a write when installs report; it must not leave a requested pack
+   out of a document it serves, which would quietly scrub less than the organization asked for.
+3. **Serving per install.** A control plane that holds the requesting install's catalog may leave
+   out `sources[]` entries the build does not have, so the build does not refuse the whole
+   document over an entry another build needs. That build cannot collect the source either way.
 
 A build without a catalog is served as before.
 
@@ -372,10 +375,7 @@ These rules are normative.
    slowest install understands it. An unknown key attaches no client behavior, so ignoring one can
    never widen collection. `config_version` stays the hard gate: a document whose version the
    client does not accept is refused whole. The client's own hand-written `config.yaml` is the
-   opposite, strict, so a typo is an error rather than a silently ignored setting. One served
-   field would widen collection if it were ignored: `sources[].exclude_add`. It is therefore served
-   only to builds that report the `sources.exclude_add` feature, and folded into `exclude` for the
-   others ([Source catalog report](#source-catalog-report)).
+   opposite, strict, so a typo is an error rather than a silently ignored setting.
 
 ## Cadence and limits
 
@@ -418,7 +418,6 @@ document may set, only add to, only disable, or not touch at all. It lives in
 | `encryption.include_install_recipient` | true | **set** | false means the install cannot decrypt what it ships. Setting false requires at least one additional recipient. A config that would seal objects no key can open is rejected whole. |
 | `sources[].enabled` | catalog | **set** | A local disable beats a remote enable. |
 | `sources[].roots / include / exclude` | catalog | **set** | Roots must stay within the compiled scope ceiling. A new root requires a release. Globs are not subsumption-checked. A served exclude replaces the catalog's excludes, including any that keep unscrubbable files out. |
-| `sources[].exclude_add` | empty | **add only** | Appended to the source's excludes, the catalog's or a layer's own, so it can only exclude more. A build that does not list the sources.exclude_add feature ignores it: a control plane serves it only to a build that does, and folds it into exclude, over that build's reported catalog, for one that does not. |
 | `sources[].max_file_bytes` | catalog | **set** | — |
 | `sources[].enrichers{}` | catalog | **turn off only** | May disable a registered enricher. May not enable one, and may not attach one the catalog does not have. An enricher reads a store the raw pipeline never touches. |
 | `a source id not in the compiled catalog` | — | **refused** | A config layer cannot create a source. It can only adjust one. |

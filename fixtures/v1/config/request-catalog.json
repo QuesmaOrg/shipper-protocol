@@ -28,6 +28,6 @@
       }
     ],
     "rule_packs": ["gitleaks-core", "quesma-extra", "cloud-keys", "generic-entropy", "pii-core"],
-    "features": ["sources.exclude_add"]
+    "features": []
   }
 }

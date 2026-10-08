@@ -99,12 +99,6 @@
       "note": "Roots must stay within the compiled scope ceiling. A new root requires a release. Globs are not subsumption-checked. A served exclude replaces the catalog's excludes, including any that keep unscrubbable files out."
     },
     {
-      "field": "sources[].exclude_add",
-      "default": "empty",
-      "server_may": "union",
-      "note": "Appended to the source's excludes, the catalog's or a layer's own, so it can only exclude more. A build that does not list the sources.exclude_add feature ignores it: a control plane serves it only to a build that does, and folds it into exclude, over that build's reported catalog, for one that does not."
-    },
-    {
       "field": "sources[].max_file_bytes",
       "default": "catalog",
       "server_may": "set"

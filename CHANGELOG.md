@@ -18,11 +18,9 @@ versioning. Wire versions (`/v1/`, `/v2/`) are immutable and are not tracked by 
 
 - `/v1/config` requests may carry `catalog`: the build's compiled source catalog (sources, rule
   packs, served-document features), root templates unexpanded. Optional, so older clients are
-  served as before. PROTOCOL.md gains "Source catalog report": how a control plane validates
-  writes and serves per install with it.
-- Served documents may carry `sources[].exclude_add`, appended to a source's excludes (rulebook
-  class `union`). Served only to builds that report the `sources.exclude_add` feature and folded
-  into `exclude` for the others, because an ignored addition would widen collection.
+  served as before. PROTOCOL.md gains "Source catalog report": the reported sources are what a
+  control plane has discovered, not an allowlist; how it validates writes and serves per install
+  with them; and that it never leaves a requested rule pack out of a served document.
 - Initial public release of the protocol module: PROTOCOL.md, JSON Schemas for `/v1/enroll`,
   `/v1/config`, and `/v2/uploads/authorize`, the configuration authority rulebook, and golden
   fixtures. All assets are embedded in `protocol.FS`.

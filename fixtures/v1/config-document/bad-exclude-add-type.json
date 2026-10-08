@@ -1,8 +1,0 @@
-{
-  "sources": [
-    {
-      "id": "claude-code-transcripts",
-      "exclude_add": "projects/-Users-ada-client-repo/**"
-    }
-  ]
-}

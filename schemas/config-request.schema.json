@@ -31,7 +31,7 @@
       "additionalProperties": false,
       "properties": {
         "sources": {
-          "description": "Every source this build can collect. A served document may only adjust these; it cannot create one.",
+          "description": "Every source this build can collect. A served document may only adjust these; it cannot create one. Across a fleet these are the sources discovered so far, not every source there is.",
           "type": "array",
           "items": { "$ref": "#/$defs/source" }
         },
@@ -40,7 +40,7 @@
           "$ref": "#/$defs/names"
         },
         "features": {
-          "description": "Served-document features this build reads beyond the config_version it accepts, by name. Defined: \"sources.exclude_add\". A feature not listed is one the build would ignore.",
+          "description": "Served-document features this build reads beyond the config_version it accepts, by name. None is defined yet; a later field can then be served only to builds that list it.",
           "$ref": "#/$defs/names"
         }
       }
@@ -58,7 +58,7 @@
         "enabled": { "description": "Whether this build collects the source when no layer says otherwise.", "type": "boolean" },
         "roots": { "description": "The compiled root templates, unexpanded. Globs are relative to the root that resolves on a machine.", "$ref": "#/$defs/strings" },
         "include": { "description": "The compiled include globs.", "$ref": "#/$defs/strings" },
-        "exclude": { "description": "The compiled exclude globs. A served sources[].exclude replaces them; sources[].exclude_add adds to them.", "$ref": "#/$defs/strings" },
+        "exclude": { "description": "The compiled exclude globs. A served sources[].exclude replaces them.", "$ref": "#/$defs/strings" },
         "max_file_bytes": { "description": "The compiled per-file size cap.", "type": "integer", "minimum": 0 },
         "enrichers": { "description": "The registered enrichers a served document may turn off.", "$ref": "#/$defs/names" }
       }
